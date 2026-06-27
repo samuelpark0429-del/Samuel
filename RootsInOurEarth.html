@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RootsInOurEarth</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-deep: #1a3a2a;
+      --green-mid: #2d6a4f;
+      --green-light: #52b788;
+      --green-pale: #d8f3dc;
+      --bark: #6b4c2a;
+      --sky: #e8f4f8;
+      --cream: #fdf6ec;
+      --text-dark: #1c2b1e;
+      --text-mid: #3d5a42;
+      --text-light: #6b8f71;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--cream);
+      color: var(--text-dark);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(180deg, #0d2318 0%, #1a3a2a 40%, #2d6a4f 80%, #52b788 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-stars {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 7vw, 5rem);
+      color: #fff;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.4);
+    }
+
+    .hero h1 span { color: var(--green-light); }
+
+    .hero p {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: rgba(255,255,255,0.8);
+      max-width: 540px;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+      font-weight: 300;
+    }
+
+    .hero-cta {
+      background: var(--green-light);
+      color: var(--green-deep);
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 1rem;
+      padding: 0.85rem 2.2rem;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .hero-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(82,183,136,0.4);
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      color: rgba(255,255,255,0.4);
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(6px); }
+    }
+
+    /* ── FOREST SECTION ── */
+    .forest-section {
+      padding: 5rem 2rem;
+      background: var(--cream);
+    }
+
+    .section-label {
+      text-align: center;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--green-light);
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      text-align: center;
+      color: var(--green-deep);
+      margin-bottom: 1rem;
+    }
+
+    .section-subtitle {
+      text-align: center;
+      color: var(--text-light);
+      max-width: 500px;
+      margin: 0 auto 3rem;
+      line-height: 1.7;
+    }
+
+    /* ── FOREST CANVAS ── */
+    #forest-canvas {
+      width: 100%;
+      max-width: 960px;
+      margin: 0 auto;
+      min-height: 340px;
+      background: linear-gradient(180deg, var(--sky) 0%, var(--green-pale) 60%, #b7e4c7 100%);
+      border-radius: 20px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #c7e8d0;
+    }
+
+    .ground {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 60px;
+      background: linear-gradient(180deg, #74c69d 0%, #52b788 100%);
+      border-radius: 0 0 20px 20px;
+    }
+
+    .empty-forest-msg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: var(--text-light);
+      font-size: 0.95rem;
+      pointer-events: none;
+    }
+
+    /* ── TREE ELEMENTS ── */
+    .tree {
+      position: absolute;
+      bottom: 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      transform-origin: bottom center;
+      transition: transform 0.2s;
+      animation: growIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+
+    .tree:hover { transform: scale(1.08); }
+
+    @keyframes growIn {
+      from { transform: scaleY(0); opacity: 0; }
+      to { transform: scaleY(1); opacity: 1; }
+    }
+
+    .tree-crown {
+      width: 0;
+      height: 0;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+    }
+
+    .tree-trunk {
+      background: var(--bark);
+      border-radius: 3px;
+    }
+
+    .tree-name {
+      position: absolute;
+      top: -22px;
+      font-size: 0.65rem;
+      font-weight: 500;
+      color: var(--green-deep);
+      white-space: nowrap;
+      background: rgba(255,255,255,0.85);
+      padding: 1px 6px;
+      border-radius: 20px;
+      pointer-events: none;
+    }
+
+    /* ── POPUP ── */
+    .tree-popup {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      background: rgba(26,58,42,0.55);
+      backdrop-filter: blur(4px);
+      padding: 1.5rem;
+    }
+
+    .tree-popup.active { display: flex; }
+
+    .popup-card {
+      background: var(--cream);
+      border-radius: 20px;
+      padding: 2rem 2.2rem;
+      max-width: 440px;
+      width: 100%;
+      position: relative;
+      animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.85); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .popup-close {
+      position: absolute;
+      top: 1rem; right: 1rem;
+      width: 32px; height: 32px;
+      border: none;
+      background: var(--green-pale);
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.1rem;
+      color: var(--green-mid);
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s;
+    }
+
+    .popup-close:hover { background: #b7e4c7; }
+
+    .popup-tree-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
+
+    .popup-tree-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--green-deep);
+      margin-bottom: 0.3rem;
+    }
+
+    .popup-planted-by {
+      font-size: 0.8rem;
+      color: var(--text-light);
+      margin-bottom: 1rem;
+    }
+
+    .popup-place {
+      background: var(--green-pale);
+      border-radius: 12px;
+      padding: 0.9rem 1.1rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .popup-place-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--green-light);
+      font-weight: 500;
+      margin-bottom: 0.2rem;
+    }
+
+    .popup-place-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      color: var(--green-deep);
+    }
+
+    .popup-message {
+      font-size: 0.92rem;
+      color: var(--text-mid);
+      line-height: 1.6;
+      font-style: italic;
+    }
+
+    /* ── PLANT FORM ── */
+    .plant-section {
+      padding: 5rem 2rem;
+      background: var(--green-deep);
+    }
+
+    .plant-section .section-title { color: #fff; }
+    .plant-section .section-subtitle { color: rgba(255,255,255,0.6); }
+    .plant-section .section-label { color: var(--green-light); }
+
+    .plant-form {
+      max-width: 540px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+    }
+
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+
+    .form-group label {
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--green-light);
+      font-weight: 500;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 10px;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: rgba(255,255,255,0.3); }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: var(--green-light);
+      background: rgba(255,255,255,0.1);
+    }
+
+    .form-group textarea { resize: vertical; min-height: 90px; }
+
+    .plant-btn {
+      background: var(--green-light);
+      color: var(--green-deep);
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 0.9rem;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .plant-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(82,183,136,0.35);
+    }
+
+    .success-msg {
+      display: none;
+      text-align: center;
+      color: var(--green-light);
+      font-size: 1rem;
+      padding: 1rem;
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    /* ── STATS BAR ── */
+    .stats-bar {
+      background: var(--green-mid);
+      padding: 2rem;
+      display: flex;
+      justify-content: center;
+      gap: 4rem;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      text-align: center;
+      color: #fff;
+    }
+
+    .stat-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.6);
+    }
+
+    /* ── ABOUT SECTION ── */
+    .about-section {
+      padding: 5rem 2rem;
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .about-section p {
+      font-size: 1.05rem;
+      color: var(--text-mid);
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+
+    .leaf-divider {
+      font-size: 1.5rem;
+      margin: 1.5rem 0;
+      opacity: 0.4;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--green-deep);
+      color: rgba(255,255,255,0.4);
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.8rem;
+    }
+
+    footer span { color: var(--green-light); }
+
+    /* ── TREE COLOR VARIANTS ── */
+    .c-pine .tree-crown { color: #2d6a4f; }
+    .c-oak .tree-crown { color: #40916c; }
+    .c-maple .tree-crown { color: #52b788; }
+    .c-birch .tree-crown { color: #74c69d; }
+
+    @media (max-width: 600px) {
+      .stats-bar { gap: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <svg class="hero-stars" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
+    <circle cx="120" cy="80" r="1.2" fill="white" opacity="0.6"/>
+    <circle cx="340" cy="50" r="0.8" fill="white" opacity="0.5"/>
+    <circle cx="580" cy="110" r="1.5" fill="white" opacity="0.4"/>
+    <circle cx="700" cy="60" r="1" fill="white" opacity="0.7"/>
+    <circle cx="210" cy="130" r="0.6" fill="white" opacity="0.5"/>
+    <circle cx="460" cy="90" r="1.1" fill="white" opacity="0.6"/>
+    <circle cx="640" cy="150" r="0.9" fill="white" opacity="0.4"/>
+    <circle cx="60" cy="200" r="1" fill="white" opacity="0.3"/>
+    <circle cx="780" cy="180" r="0.7" fill="white" opacity="0.5"/>
+  </svg>
+
+  <h1>Roots In<br/><span>Our Earth</span></h1>
+  <p>Every tree in this forest was planted by someone who loves a place on Earth. Add yours — share the spot that makes you feel most alive.</p>
+  <a href="#plant" class="hero-cta">🌱 Plant your tree</a>
+  <p class="scroll-hint">↓ explore the forest</p>
+</section>
+
+<!-- ── ABOUT ── -->
+<section class="about-section">
+  <p class="section-label" style="font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--green-light);font-weight:500;">Why this exists</p>
+  <h2 class="section-title" style="font-family:'Playfair Display',serif;font-size:clamp(1.6rem,3.5vw,2.4rem);color:var(--green-deep);margin-bottom:1rem;">We protect what we love</h2>
+  <div class="leaf-divider">🍃</div>
+  <p>Environmental action starts with a feeling — a childhood forest, a beach at sunset, a mountain trail that changed you. This is a space to honor those places and share them with strangers who care just as much.</p>
+  <p>Every tree you plant here represents a real connection between a person and the living world. Together, we grow a forest of stories — a reminder of what's worth protecting.</p>
+</section>
+
+<!-- ── FOREST ── -->
+<section class="forest-section">
+  <p class="section-label">Our growing forest</p>
+  <h2 class="section-title">Every tree tells a story</h2>
+  <p class="section-subtitle">Click on any tree to read about the place someone loves.</p>
+
+  <div id="forest-canvas">
+    <div class="ground"></div>
+    <div class="empty-forest-msg" id="empty-msg">
+      🌱 The forest is waiting for its first tree.<br/>Be the one to start it.
+    </div>
+  </div>
+</section>
+
+<!-- ── STATS ── -->
+<div class="stats-bar">
+  <div class="stat">
+    <span class="stat-number" id="stat-trees">0</span>
+    <span class="stat-label">Trees planted</span>
+  </div>
+  <div class="stat">
+    <span class="stat-number" id="stat-places">0</span>
+    <span class="stat-label">Places shared</span>
+  </div>
+  <div class="stat">
+    <span class="stat-number" id="stat-countries">🌍</span>
+    <span class="stat-label">Community growing</span>
+  </div>
+</div>
+
+<!-- ── PLANT FORM ── -->
+<section class="plant-section" id="plant">
+  <p class="section-label">Add your tree</p>
+  <h2 class="section-title">Plant your piece of the forest</h2>
+  <p class="section-subtitle" style="color:rgba(255,255,255,0.55);text-align:center;max-width:500px;margin:0 auto 2.5rem;line-height:1.7;">Give your tree a name, then share a place in nature that matters to you and why.</p>
+
+  <div class="plant-form" id="plant-form">
+    <div class="form-group">
+      <label for="planter-name">Your name</label>
+      <input type="text" id="planter-name" placeholder="e.g. Maya" maxlength="40" />
+    </div>
+    <div class="form-group">
+      <label for="tree-name">Name your tree</label>
+      <input type="text" id="tree-name" placeholder="e.g. The Wanderer, Old Faithful…" maxlength="40" />
+    </div>
+    <div class="form-group">
+      <label for="place-name">A place in nature you love</label>
+      <input type="text" id="place-name" placeholder="e.g. Catskill Mountains, NY" maxlength="60" />
+    </div>
+    <div class="form-group">
+      <label for="place-message">Why does it matter to you?</label>
+      <textarea id="place-message" placeholder="Tell the forest your story…" maxlength="280"></textarea>
+    </div>
+    <button class="plant-btn" onclick="plantTree()">🌳 Plant my tree</button>
+  </div>
+
+  <p class="success-msg" id="success-msg">🎉 Your tree has been planted! Look for it in the forest above.</p>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <p>Made with <span>🌿</span> for the Earth · <strong style="color:rgba(255,255,255,0.6)">RootsInOurEarth</strong></p>
+  <p style="margin-top:0.4rem;">A community forest of people who love this planet.</p>
+</footer>
+
+<!-- ── POPUP ── -->
+<div class="tree-popup" id="tree-popup" onclick="closePopup(event)">
+  <div class="popup-card">
+    <button class="popup-close" onclick="closePopupDirect()">✕</button>
+    <div class="popup-tree-icon" id="popup-icon">🌲</div>
+    <div class="popup-tree-name" id="popup-tree-name">Tree Name</div>
+    <div class="popup-planted-by" id="popup-planted-by">Planted by Someone</div>
+    <div class="popup-place">
+      <div class="popup-place-label">A place they love</div>
+      <div class="popup-place-name" id="popup-place-name">Somewhere beautiful</div>
+    </div>
+    <div class="popup-message" id="popup-message">"..."</div>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = 'rootsinourearth_trees_v1';
+const TREE_ICONS = ['🌲','🌳','🌴','🎋','🌵'];
+const COLORS = ['#2d6a4f','#40916c','#52b788','#1b4332','#081c15'];
+
+let trees = [];
+
+async function loadTrees() {
+  try {
+    const result = await window.storage.get(STORAGE_KEY);
+    if (result && result.value) {
+      trees = JSON.parse(result.value);
+    }
+  } catch(e) {
+    trees = [];
+  }
+  renderForest();
+  updateStats();
+}
+
+async function saveTrees() {
+  try {
+    await window.storage.set(STORAGE_KEY, JSON.stringify(trees));
+  } catch(e) {}
+}
+
+function plantTree() {
+  const planter = document.getElementById('planter-name').value.trim();
+  const treeName = document.getElementById('tree-name').value.trim();
+  const placeName = document.getElementById('place-name').value.trim();
+  const message = document.getElementById('place-message').value.trim();
+
+  if (!planter || !treeName || !placeName || !message) {
+    alert('Please fill in all fields to plant your tree 🌱');
+    return;
+  }
+
+  const tree = {
+    id: Date.now(),
+    planter,
+    treeName,
+    placeName,
+    message,
+    icon: TREE_ICONS[Math.floor(Math.random() * TREE_ICONS.length)],
+    color: COLORS[Math.floor(Math.random() * COLORS.length)],
+    x: 5 + Math.random() * 88,
+    size: 0.7 + Math.random() * 0.6
+  };
+
+  trees.push(tree);
+  saveTrees();
+  renderForest();
+  updateStats();
+
+  document.getElementById('plant-form').style.display = 'none';
+  const msg = document.getElementById('success-msg');
+  msg.style.display = 'block';
+
+  setTimeout(() => {
+    document.getElementById('planter-name').value = '';
+    document.getElementById('tree-name').value = '';
+    document.getElementById('place-name').value = '';
+    document.getElementById('place-message').value = '';
+    document.getElementById('plant-form').style.display = 'flex';
+    msg.style.display = 'none';
+  }, 3500);
+
+  document.getElementById('forest-canvas').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function renderForest() {
+  const canvas = document.getElementById('forest-canvas');
+  const emptyMsg = document.getElementById('empty-msg');
+
+  const existing = canvas.querySelectorAll('.tree');
+  existing.forEach(t => t.remove());
+
+  if (trees.length === 0) {
+    emptyMsg.style.display = 'block';
+    return;
+  }
+
+  emptyMsg.style.display = 'none';
+
+  trees.forEach((tree, i) => {
+    const size = tree.size;
+    const trunkW = Math.round(8 * size);
+    const trunkH = Math.round(30 * size);
+    const crownH = Math.round(60 * size);
+    const crownW = Math.round(44 * size);
+
+    const el = document.createElement('div');
+    el.className = 'tree';
+    el.style.left = tree.x + '%';
+    el.style.animationDelay = (i * 0.06) + 's';
+    el.title = tree.treeName;
+
+    el.innerHTML = `
+      <div class="tree-name">${tree.treeName}</div>
+      <svg width="${crownW}" height="${crownH}" viewBox="0 0 44 60" style="overflow:visible">
+        <polygon points="22,0 44,60 0,60" fill="${tree.color}" opacity="0.95"/>
+        <polygon points="22,10 40,55 4,55" fill="${tree.color}" opacity="0.75"/>
+      </svg>
+      <div class="tree-trunk" style="width:${trunkW}px;height:${trunkH}px;"></div>
+    `;
+
+    el.addEventListener('click', () => openPopup(tree));
+    canvas.appendChild(el);
+  });
+}
+
+function openPopup(tree) {
+  document.getElementById('popup-icon').textContent = tree.icon;
+  document.getElementById('popup-tree-name').textContent = tree.treeName;
+  document.getElementById('popup-planted-by').textContent = 'Planted by ' + tree.planter;
+  document.getElementById('popup-place-name').textContent = tree.placeName;
+  document.getElementById('popup-message').textContent = '\u201c' + tree.message + '\u201d';
+  document.getElementById('tree-popup').classList.add('active');
+}
+
+function closePopup(e) {
+  if (e.target === document.getElementById('tree-popup')) {
+    document.getElementById('tree-popup').classList.remove('active');
+  }
+}
+
+function closePopupDirect() {
+  document.getElementById('tree-popup').classList.remove('active');
+}
+
+function updateStats() {
+  document.getElementById('stat-trees').textContent = trees.length;
+  document.getElementById('stat-places').textContent = trees.length;
+}
+
+loadTrees();
+</script>
+</body>
+</html>
