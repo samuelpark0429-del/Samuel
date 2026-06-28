@@ -25,7 +25,7 @@
 
     body {
       font-family: 'Inter', sans-serif;
-      background: var(--cream);
+      background: #edf7ee;
       color: var(--text-dark);
       min-height: 100vh;
       overflow-x: hidden;
@@ -111,6 +111,8 @@
     .forest-section {
       padding: 5rem 2rem;
       background: var(--cream);
+      position: relative;
+      z-index: 1;
     }
 
     .section-label {
@@ -144,7 +146,7 @@
       width: 100%;
       max-width: 960px;
       margin: 0 auto;
-      min-height: 340px;
+      min-height: 440px;
       background: linear-gradient(180deg, var(--sky) 0%, var(--green-pale) 60%, #b7e4c7 100%);
       border-radius: 20px;
       position: relative;
@@ -169,6 +171,23 @@
       color: var(--text-light);
       font-size: 0.95rem;
       pointer-events: none;
+    }
+
+    .section-with-images {
+      position: relative;
+      overflow: hidden;
+      padding-left: 5rem;
+      padding-right: 5rem;
+      padding-bottom: 10rem;
+      min-height: 40rem;
+      background: linear-gradient(180deg, rgba(235,250,235,1) 0%, rgba(245,252,247,1) 55%, rgba(235,250,235,0.98) 100%);
+    }
+    .section-with-images > * {
+      position: relative;
+      z-index: 1;
+    }
+    @media (max-width: 1100px) {
+      .section-with-images { padding-left: 2rem; padding-right: 2rem; }
     }
 
     /* ── TREE ELEMENTS ── */
@@ -373,6 +392,60 @@
       transition: transform 0.2s, box-shadow 0.2s;
     }
 
+    .donate-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 80px;
+      border-radius: 18px;
+      background: #fff;
+      color: var(--green-deep);
+      text-decoration: none;
+      box-shadow: 0 10px 24px rgba(20, 59, 37, 0.1);
+      padding: 1rem 1.1rem;
+      font-weight: 600;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .donate-link:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 28px rgba(20, 59, 37, 0.16);
+    }
+
+    .popup-actions,
+    .popup-edit-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .action-button {
+      flex: 1;
+      min-width: 130px;
+      border: none;
+      border-radius: 999px;
+      padding: 0.9rem 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .action-button:hover { transform: translateY(-1px); }
+
+    .edit-button { background: #fff; color: var(--green-deep); }
+    .delete-button { background: #ef8d75; color: #811f0f; }
+    .save-button { background: var(--green-light); color: var(--green-deep); }
+    .cancel-button { background: #f4f4f4; color: var(--text-dark); }
+
+    .popup-edit-form {
+      display: none;
+      margin-top: 1.5rem;
+    }
+
+    .tree-popup.editing .popup-view { display: none; }
+    .tree-popup.editing .popup-edit-form { display: block; }
+
     .plant-btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 8px 24px rgba(82,183,136,0.35);
@@ -420,9 +493,11 @@
     /* ── ABOUT SECTION ── */
     .about-section {
       padding: 5rem 2rem;
-      max-width: 700px;
+      max-width: 720px;
       margin: 0 auto;
       text-align: center;
+      position: relative;
+      z-index: 1;
     }
 
     .about-section p {
@@ -483,7 +558,7 @@
 </section>
 
 <!-- ── ABOUT ── -->
-<section class="about-section">
+<section class="about-section section-with-images">
   <p class="section-label" style="font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--green-light);font-weight:500;">Why this exists</p>
   <h2 class="section-title" style="font-family:'Playfair Display',serif;font-size:clamp(1.6rem,3.5vw,2.4rem);color:var(--green-deep);margin-bottom:1rem;">We protect what we love</h2>
   <div class="leaf-divider">🍃</div>
@@ -492,7 +567,7 @@
 </section>
 
 <!-- ── FOREST ── -->
-<section class="forest-section">
+<section class="forest-section section-with-images">
   <p class="section-label">Our growing forest</p>
   <h2 class="section-title">Every tree tells a story</h2>
   <p class="section-subtitle">Click on any tree to read about the place someone loves.</p>
@@ -501,6 +576,21 @@
     <div class="ground"></div>
     <div class="empty-forest-msg" id="empty-msg">
       🌱 The forest is waiting for its first tree.<br/>Be the one to start it.
+    </div>
+  </div>
+</section>
+
+<!-- ── DONATE / SUPPORT ── -->
+<section class="donate-section section-with-images" style="padding:4rem 2rem; background: linear-gradient(180deg,var(--green-pale), #e6f6ea);">
+  <div style="max-width:960px;margin:0 auto;position:relative;z-index:1;">
+    <p class="section-label" style="color:var(--green-mid);">Support the Earth</p>
+    <h2 class="section-title" style="color:var(--green-deep);">Partner organizations</h2>
+    <p class="section-subtitle" style="color:var(--text-mid);">If you can, consider supporting organizations working to protect forests and communities.</p>
+    <div class="donate-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-top:1.5rem;">
+      <a href="https://onetreeplanted.org" target="_blank" rel="noopener" class="donate-link">One Tree Planted</a>
+      <a href="https://www.nature.org" target="_blank" rel="noopener" class="donate-link">The Nature Conservancy</a>
+      <a href="https://www.rainforest-alliance.org" target="_blank" rel="noopener" class="donate-link">Rainforest Alliance</a>
+      <a href="https://trees.org" target="_blank" rel="noopener" class="donate-link">Trees for the Future</a>
     </div>
   </div>
 </section>
@@ -563,38 +653,127 @@
     <div class="popup-tree-icon" id="popup-icon">🌲</div>
     <div class="popup-tree-name" id="popup-tree-name">Tree Name</div>
     <div class="popup-planted-by" id="popup-planted-by">Planted by Someone</div>
-    <div class="popup-place">
-      <div class="popup-place-label">A place they love</div>
-      <div class="popup-place-name" id="popup-place-name">Somewhere beautiful</div>
+    <div class="popup-view">
+      <div class="popup-place">
+        <div class="popup-place-label">A place they love</div>
+        <div class="popup-place-name" id="popup-place-name">Somewhere beautiful</div>
+      </div>
+      <div class="popup-message" id="popup-message">"..."</div>
+      <div class="popup-actions">
+        <button class="action-button edit-button" onclick="enableTreeEdit(event)">Edit</button>
+        <button class="action-button delete-button" onclick="deleteTree(event)">Delete</button>
+      </div>
     </div>
-    <div class="popup-message" id="popup-message">"..."</div>
+    <div class="popup-edit-form" id="popup-edit-form">
+      <div class="form-group">
+        <label for="popup-edit-name">Tree name</label>
+        <input type="text" id="popup-edit-name" />
+      </div>
+      <div class="form-group">
+        <label for="popup-edit-place">Place name</label>
+        <input type="text" id="popup-edit-place" />
+      </div>
+      <div class="form-group">
+        <label for="popup-edit-message">Tree story</label>
+        <textarea id="popup-edit-message" rows="4"></textarea>
+      </div>
+      <div class="popup-edit-actions">
+        <button class="action-button save-button" onclick="saveTreeEdits(event)">Save</button>
+        <button class="action-button cancel-button" onclick="cancelTreeEdits(event)">Cancel</button>
+      </div>
+    </div>
   </div>
 </div>
 
 <script>
 const STORAGE_KEY = 'rootsinourearth_trees_v1';
 const TREE_ICONS = ['🌲','🌳','🌴','🎋','🌵'];
-const COLORS = ['#2d6a4f','#40916c','#52b788','#1b4332','#081c15'];
+const COLORS = ['#2fab55','#3fce72','#5ad68d','#45b36e','#1d7f46'];
 
 let trees = [];
 
 async function loadTrees() {
+  trees = [];
   try {
-    const result = await window.storage.get(STORAGE_KEY);
-    if (result && result.value) {
-      trees = JSON.parse(result.value);
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      trees = JSON.parse(stored);
     }
-  } catch(e) {
+  } catch (e) {
     trees = [];
   }
+
+  try {
+    if (window.storage && window.storage.get) {
+      const result = await window.storage.get(STORAGE_KEY);
+      if (result && result.value) {
+        trees = JSON.parse(result.value);
+      }
+    }
+  } catch (e) {}
+
   renderForest();
   updateStats();
 }
 
 async function saveTrees() {
+  const payload = JSON.stringify(trees);
   try {
-    await window.storage.set(STORAGE_KEY, JSON.stringify(trees));
-  } catch(e) {}
+    localStorage.setItem(STORAGE_KEY, payload);
+  } catch (e) {}
+
+  try {
+    if (window.storage && window.storage.set) {
+      await window.storage.set(STORAGE_KEY, payload);
+    }
+  } catch (e) {}
+}
+
+function enableTreeEdit(event) {
+  event.stopPropagation();
+  document.getElementById('tree-popup').classList.add('editing');
+}
+
+function cancelTreeEdits(event) {
+  event.stopPropagation();
+  document.getElementById('tree-popup').classList.remove('editing');
+}
+
+function saveTreeEdits(event) {
+  event.stopPropagation();
+  const popup = document.getElementById('tree-popup');
+  const treeId = Number(popup.dataset.treeId);
+  const tree = trees.find((item) => item.id === treeId);
+  if (!tree) return;
+
+  const name = document.getElementById('popup-edit-name').value.trim();
+  const place = document.getElementById('popup-edit-place').value.trim();
+  const message = document.getElementById('popup-edit-message').value.trim();
+
+  if (!name || !place || !message) {
+    alert('Please complete all fields before saving.');
+    return;
+  }
+
+  tree.treeName = name;
+  tree.placeName = place;
+  tree.message = message;
+  saveTrees();
+  renderForest();
+  openPopup(tree);
+}
+
+function deleteTree(event) {
+  event.stopPropagation();
+  const popup = document.getElementById('tree-popup');
+  const treeId = Number(popup.dataset.treeId);
+  if (!confirm('Delete this tree permanently?')) return;
+
+  trees = trees.filter((item) => item.id !== treeId);
+  saveTrees();
+  renderForest();
+  updateStats();
+  closePopupDirect();
 }
 
 function plantTree() {
@@ -670,9 +849,12 @@ function renderForest() {
 
     el.innerHTML = `
       <div class="tree-name">${tree.treeName}</div>
-      <svg width="${crownW}" height="${crownH}" viewBox="0 0 44 60" style="overflow:visible">
-        <polygon points="22,0 44,60 0,60" fill="${tree.color}" opacity="0.95"/>
-        <polygon points="22,10 40,55 4,55" fill="${tree.color}" opacity="0.75"/>
+      <svg width="${crownW}" height="${crownH}" viewBox="0 0 44 68" style="overflow:visible">
+        <ellipse cx="22" cy="18" rx="18" ry="16" fill="${tree.color}" opacity="0.95"/>
+        <ellipse cx="22" cy="10" rx="14" ry="12" fill="${tree.color}" opacity="0.88"/>
+        <ellipse cx="22" cy="26" rx="20" ry="18" fill="${tree.color}" opacity="0.8"/>
+        <ellipse cx="22" cy="40" rx="16" ry="14" fill="${tree.color}" opacity="0.7"/>
+        <circle cx="22" cy="36" r="5" fill="rgba(255,255,255,0.15)" />
       </svg>
       <div class="tree-trunk" style="width:${trunkW}px;height:${trunkH}px;"></div>
     `;
@@ -683,22 +865,35 @@ function renderForest() {
 }
 
 function openPopup(tree) {
+  const popup = document.getElementById('tree-popup');
+  popup.dataset.treeId = tree.id;
+  popup.classList.remove('editing');
+
   document.getElementById('popup-icon').textContent = tree.icon;
   document.getElementById('popup-tree-name').textContent = tree.treeName;
   document.getElementById('popup-planted-by').textContent = 'Planted by ' + tree.planter;
   document.getElementById('popup-place-name').textContent = tree.placeName;
   document.getElementById('popup-message').textContent = '\u201c' + tree.message + '\u201d';
-  document.getElementById('tree-popup').classList.add('active');
+
+  document.getElementById('popup-edit-name').value = tree.treeName;
+  document.getElementById('popup-edit-place').value = tree.placeName;
+  document.getElementById('popup-edit-message').value = tree.message;
+
+  popup.classList.add('active');
 }
 
 function closePopup(e) {
   if (e.target === document.getElementById('tree-popup')) {
-    document.getElementById('tree-popup').classList.remove('active');
+    const popup = document.getElementById('tree-popup');
+    popup.classList.remove('active');
+    popup.classList.remove('editing');
   }
 }
 
 function closePopupDirect() {
-  document.getElementById('tree-popup').classList.remove('active');
+  const popup = document.getElementById('tree-popup');
+  popup.classList.remove('active');
+  popup.classList.remove('editing');
 }
 
 function updateStats() {
